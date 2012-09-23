@@ -7,7 +7,7 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-rectangle::rectangle(int depth, ci::Vec2f position, ci::Vec2f offset, float radius){
+rectangle::rectangle(int depth, ci::Vec2f position, ci::Vec2f offset, float radius, int xDir, int yDir){
 
 	next_ = this;
 	prev_ = this;
@@ -15,6 +15,8 @@ rectangle::rectangle(int depth, ci::Vec2f position, ci::Vec2f offset, float radi
 	position_ = position;
 	offset_ = offset;
 	radius_ = radius;
+	xDir_ = xDir;
+	yDir_=yDir;
 }
 
 void insertAfter(rectangle* newItem, rectangle* insertHere){

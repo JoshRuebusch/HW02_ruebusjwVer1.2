@@ -1,9 +1,11 @@
 class rectangle{
 public:
-	rectangle(int depth, ci::Vec2f position, ci::Vec2f offset, float radius);
+	rectangle(int depth, ci::Vec2f position, ci::Vec2f offset, float radius, int xDir, int yDir);
 	
 	rectangle* next_;
 	rectangle* prev_;
+	int xDir_;
+	int yDir_;
 	
 	ci::Vec2f offset_;
 	ci::Vec2f position_;
@@ -11,7 +13,6 @@ public:
 	
 	bool isInside(float x, float y);
 	void draw(ci::Vec2i position, int red, int green, int blue);
-	void update(ci::Vec2f parent_position, float parent_r);
 };
 
 void insertAfter(rectangle* therect, rectangle* insert_here);
