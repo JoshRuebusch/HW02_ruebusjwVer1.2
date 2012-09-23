@@ -18,6 +18,10 @@ class HW02_ruebusj2Ver2App : public AppBasic {
 	void prepareSettings(Settings* settings);
 	Vec2f trans;
 	bool pressed;
+
+	int xPos;
+	int yPos;
+
 	int rand1;
 	int rand2;
 
@@ -27,6 +31,7 @@ class HW02_ruebusj2Ver2App : public AppBasic {
 
 	bool insert;
 	bool reverse;
+	bool solid;
 private:
 	rectangle* rect_list;
 	rectangle* newPoint;
@@ -34,6 +39,7 @@ private:
 	static const int appHeight=600;
 	static const Vec2f x_;
 	static const Vec2f y_;
+	int counter;
 	int frameNum;
 
 };
@@ -52,10 +58,15 @@ void HW02_ruebusj2Ver2App::setup()
 	reverse = false;
 	pressed = false;
 	trans = 55*x_ + 55*y_;
-	rect_list = new rectangle(4, trans, Vec2f(0,0), 50,0,0);
+	rect_list = new rectangle(255, trans, Vec2f(0,0), 50,0,0);
 	frameNum = 0;
 	rand1 = 0;
 	rand2 = 0;
+
+	xPos = 50;
+	yPos = 50;
+	counter = 0;
+
 	cRed = 255;
 	cGreen = 0;
 	cBlue = 0;
@@ -72,7 +83,7 @@ void HW02_ruebusj2Ver2App::keyDown( KeyEvent event){
 
 void HW02_ruebusj2Ver2App::mouseDown( MouseEvent event )
 {
-	
+	event.getPos();
 }
 
 
@@ -92,8 +103,8 @@ void HW02_ruebusj2Ver2App::update()
 	{
 		if(cur->position_.x < 50)
 		{
-			rand1= cur->xDir_ = 2;
-			rand2 =cur->yDir_= rand()%3-1;
+			rand1=cur->xDir_ = 2;
+			rand2=cur->yDir_= rand()%3-1;
 		}
 		else if(cur->position_.y < 50)
 		{
@@ -113,11 +124,23 @@ void HW02_ruebusj2Ver2App::update()
 	}
 			if(insert)
 			{
-				newPoint = new rectangle(3, trans, Vec2f(0,0),50, rand1, rand2); 
+				newPoint = new rectangle(cur->depth_-counter, trans, Vec2f(0,0),50, rand1, rand2); 
 				insertAfter(newPoint, rect_list);
-				cur->next_->position_ = 50*x_+50*y_;
+				cur->next_->position_ = xPos*x_+yPos*y_;
+				if(yPos <=51 && xPos <= appWidth-51)
+					xPos= xPos+10;
+				else if(xPos>appWidth-51 && yPos<=appHeight-51)
+					yPos= yPos+10;
+				else if(yPos>appHeight-51 && xPos>= 51)
+					xPos = xPos - 10;
+				else
+					yPos =yPos-10;
+				counter++;
+
 				insert = false;
 			}
+
+			
 
 			cur->position_ = cur->position_ + cur->xDir_*x_+cur->yDir_*y_;
 			/*
@@ -144,7 +167,7 @@ void HW02_ruebusj2Ver2App::draw()
 			}
 			else
 			{
-			cur->draw(cur->position_, cRed,cGreen,cBlue);
+			cur->draw(cur->position_, cur->depth_,cGreen,cBlue);
 			}
 			cur = cur->next_;
 		} while (cur != rect_list);

@@ -6,6 +6,7 @@ public:
 	rectangle* prev_;
 	int xDir_;
 	int yDir_;
+	int depth_;
 	
 	ci::Vec2f offset_;
 	ci::Vec2f position_;

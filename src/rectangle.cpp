@@ -17,6 +17,7 @@ rectangle::rectangle(int depth, ci::Vec2f position, ci::Vec2f offset, float radi
 	radius_ = radius;
 	xDir_ = xDir;
 	yDir_=yDir;
+	depth_=depth;
 }
 
 void insertAfter(rectangle* newItem, rectangle* insertHere){
