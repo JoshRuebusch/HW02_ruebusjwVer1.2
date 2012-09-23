@@ -1,6 +1,8 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 #include "Rectangle.h"
+#include "cinder/app/KeyEvent.h"
+
 
 using namespace ci;
 using namespace ci::app;
@@ -10,6 +12,7 @@ class HW02_ruebusj2Ver2App : public AppBasic {
   public:
 	void setup();
 	void mouseDown( MouseEvent event );	
+	void keyDown( KeyEvent event );
 	void update();
 	void draw();
 	void prepareSettings(Settings* settings);
@@ -17,6 +20,9 @@ class HW02_ruebusj2Ver2App : public AppBasic {
 	bool pressed;
 	int rand1;
 	int rand2;
+
+	bool insert;
+	bool reverse;
 private:
 	rectangle* rect_list;
 	rectangle* newPoint;
@@ -38,6 +44,8 @@ void HW02_ruebusj2Ver2App::prepareSettings(Settings* settings){
 
 void HW02_ruebusj2Ver2App::setup()
 {
+	insert = false;
+	reverse = false;
 	pressed = false;
 	trans = 55*x_ + 55*y_;
 	rect_list = new rectangle(4, trans, Vec2f(0,0), 50);
@@ -46,16 +54,29 @@ void HW02_ruebusj2Ver2App::setup()
 	rand2 = 0;
 }
 
+void HW02_ruebusj2Ver2App::keyDown( KeyEvent event){
+	if(event.getChar() == 'q')
+		insert = true;
+
+	if(event.getChar() == 'r')
+		reverse = true;
+}
+
+
 void HW02_ruebusj2Ver2App::mouseDown( MouseEvent event )
 {
-	if(event.isLeftDown())
-	{
-		pressed = true;
-	}
+	
 }
+
+
 
 void HW02_ruebusj2Ver2App::update()
 {
+	if(reverse)
+	{
+		reverseList(rect_list);
+		reverse = false;
+	}
 	
 	rectangle* cur = rect_list;
 	if(cur != NULL){
@@ -90,13 +111,13 @@ void HW02_ruebusj2Ver2App::update()
 			if(frameNum==2)
 				pressed = true;*/
 
-			if(pressed == true)
+			if(insert)
 			{
 				newPoint = new rectangle(3, trans, Vec2f(0,0),50); 
 
 				insertAfter(newPoint, rect_list);
 				cur->next_->position_ = 50*x_+50*y_;
-				pressed = false;
+				insert = false;
 				frameNum++;
 			}
 			cur = cur->next_;
@@ -113,7 +134,13 @@ void HW02_ruebusj2Ver2App::draw()
 	rectangle* cur = rect_list;
 	if(cur != NULL){
 		do{
-			cur->draw(cur->position_);
+			if(cur == rect_list)
+			{
+			}
+			else
+			{
+			cur->draw(cur->position_, 255,0,0);
+			}
 			cur = cur->next_;
 		} while (cur != rect_list);
 	}
