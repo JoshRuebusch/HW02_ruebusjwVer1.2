@@ -105,10 +105,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\HW02_ruebusj2Ver2App.cpp" />
-    <ClCompile Include="..\src\Rectangle.cpp" />
+    <ClCompile Include="..\src\rectangle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Rectangle.h" />
+    <ClInclude Include="..\include\rectangle.h" />
     <ClInclude Include="..\include\Resources.h" />
   </ItemGroup>
   <ItemGroup>

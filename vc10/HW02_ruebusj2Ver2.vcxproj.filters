@@ -18,7 +18,7 @@
     <ClCompile Include="..\src\HW02_ruebusj2Ver2App.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Rectangle.cpp">
+    <ClCompile Include="..\src\rectangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,7 +26,7 @@
     <ClInclude Include="..\include\Resources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Rectangle.h">
+    <ClInclude Include="..\include\rectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
