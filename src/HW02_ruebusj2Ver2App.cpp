@@ -1,6 +1,7 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
-#include "Rectangle.h"
+#include "rectangle.h"           
+//Lucy: "What you defined before 'Rectangle.h' will not work under Mac and other versions, only under windows. So I think it is important to change the beginning letter to lowercase."
 #include "cinder/app/KeyEvent.h"
 
 
@@ -16,6 +17,19 @@ class HW02_ruebusj2Ver2App : public AppBasic {
 	void update();
 	void draw();
 	void prepareSettings(Settings* settings);
+
+	//Lucy:"I will suggest to move all these variables to private part because we may not want others to change them."
+	
+private:
+	rectangle* rect_list;
+	rectangle* newPoint;
+	static const int appWidth=800;
+	static const int appHeight=600;
+	static const Vec2f x_;
+	static const Vec2f y_;
+	int counter;
+	int frameNum;
+
 	Vec2f trans;
 	bool pressed;
 
@@ -32,15 +46,6 @@ class HW02_ruebusj2Ver2App : public AppBasic {
 	bool insert;
 	bool reverse;
 	bool solid;
-private:
-	rectangle* rect_list;
-	rectangle* newPoint;
-	static const int appWidth=800;
-	static const int appHeight=600;
-	static const Vec2f x_;
-	static const Vec2f y_;
-	int counter;
-	int frameNum;
 
 };
 
@@ -67,6 +72,7 @@ void HW02_ruebusj2Ver2App::setup()
 	yPos = 50;
 	counter = 0;
 
+	//Lucy: "From my own perspective, I may consider to create Color8u color = Color8u(r,g,b) directly instead of creating three variables separately. It may be easier and save code. "
 	cRed = 255;
 	cGreen = 0;
 	cBlue = 0;
@@ -82,28 +88,28 @@ void HW02_ruebusj2Ver2App::keyDown( KeyEvent event){
 
 
 void HW02_ruebusj2Ver2App::mouseDown( MouseEvent event )
-{
-	event.getPos();
+{//Lucy: "You did nothing by using mouseDown method, so I think we probably do not need getPos() method here. That is why I removed that line. 
 }
 
 
 
 void HW02_ruebusj2Ver2App::update()
-{
+{// Lucy: "Great way to reverse linked list by using boolean expression --> implement main goal E."
 	if(reverse)
 	{
 		reverseList(rect_list);
 		reverse = false;
 	}
 	
+	// Lucy: "Make all the rectangles keep moving. I really love this creative idea! --> implement main goal D"
 	rectangle* cur = rect_list;
 	if(cur != NULL){
 		do{
 			if(frameNum%50==0)
 	{
-		if(cur->position_.x < 50)
-		{
-			rand1=cur->xDir_ = 2;
+		if(cur->position_.x < 50)       
+		{								
+			rand1=cur->xDir_ = 2;		
 			rand2=cur->yDir_= rand()%3-1;
 		}
 		else if(cur->position_.y < 50)
@@ -122,6 +128,7 @@ void HW02_ruebusj2Ver2App::update()
 			rand2 =cur->yDir_= rand()%3-1;
 		}
 	}
+			// Lucy: "Implement main goal A. I love your idea that keeping drawing one rectangle in different positions! Also creative to use only one variable for many rectangles."
 			if(insert)
 			{
 				newPoint = new rectangle(cur->depth_-counter, trans, Vec2f(0,0),50, rand1, rand2); 
@@ -156,14 +163,15 @@ void HW02_ruebusj2Ver2App::update()
 
 void HW02_ruebusj2Ver2App::draw()
 {
-	// clear out the window with black
+	// clear out the window with white
+	//Lucy: "This line's job is to clear out the window with white, not black. But it is not a big deal."
 	gl::clear( Color( 255, 255, 255 ) ); 
 
 	rectangle* cur = rect_list;
 	if(cur != NULL){
 		do{
 			if(cur == rect_list)
-			{
+			{//Lucy: "If there is nothing under this if statement, then we probably do not need it."
 			}
 			else
 			{
