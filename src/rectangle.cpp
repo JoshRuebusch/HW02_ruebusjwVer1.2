@@ -8,7 +8,7 @@ using namespace ci::app;
 using namespace std;
 
 rectangle::rectangle(int depth, ci::Vec2f position, ci::Vec2f offset, float radius, int xDir, int yDir){
-
+//each rectangle has a next and prev, position, radius, x and y direction and depth
 	next_ = this;
 	prev_ = this;
 
@@ -20,14 +20,14 @@ rectangle::rectangle(int depth, ci::Vec2f position, ci::Vec2f offset, float radi
 	depth_=depth;
 }
 
-void insertAfter(rectangle* newItem, rectangle* insertHere){
+void insertAfter(rectangle* newItem, rectangle* insertHere){	//inserts a rectangle at the "front" of the list showing up at the back of the picture
 	newItem->next_ = insertHere->next_;
 	newItem->prev_= insertHere;
 	insertHere->next_->prev_ = newItem;
 	insertHere->next_=newItem;
 }
 
-void rectangle::draw(Vec2i mp, int red, int green, int blue){
+void rectangle::draw(Vec2i mp, int red, int green, int blue){	//draws a rectangle with a black outline
 	
 	gl::drawSolidRect(Rectf(position_.x-radius_,position_.y-radius_,position_.x+radius_,position_.y+radius_));
 	gl::color(Color8u(red,green,blue));
@@ -35,7 +35,7 @@ void rectangle::draw(Vec2i mp, int red, int green, int blue){
 	gl::color(Color8u(0,0,0));
 }
 
-void reverseList(rectangle* first_node){
+void reverseList(rectangle* first_node){ //reverses the entire list of rectangles. 
 	rectangle* cur = first_node;
 	do{
 		rectangle* temp = cur->next_;

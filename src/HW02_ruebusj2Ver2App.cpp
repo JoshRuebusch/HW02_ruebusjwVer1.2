@@ -41,8 +41,8 @@ class HW02_ruebusj2Ver2App : public AppBasic {
 	bool reverse;
 	bool solid;
 private:
-	rectangle* rect_list;
-	rectangle* newPoint;
+	rectangle* rect_list;		//sentenal node
+	rectangle* newPoint;		//points to new rectangle each time it is created 
 	static const int appWidth=800;
 	static const int appHeight=600;
 	static const Vec2f x_;
@@ -52,8 +52,8 @@ private:
 
 };
 
-const Vec2f HW02_ruebusj2Ver2App::x_ = Vec2f(1.0f,0.0f);
-const Vec2f HW02_ruebusj2Ver2App::y_ = Vec2f(0.0f,1.0f);
+const Vec2f HW02_ruebusj2Ver2App::x_ = Vec2f(1.0f,0.0f);		//controls x movement
+const Vec2f HW02_ruebusj2Ver2App::y_ = Vec2f(0.0f,1.0f);		//controls y movement
 
 void HW02_ruebusj2Ver2App::prepareSettings(Settings* settings){
 	settings->setWindowSize(appWidth,appHeight);
@@ -67,6 +67,7 @@ void HW02_ruebusj2Ver2App::setup()
 	pressed = false;
 	trans = 55*x_ + 55*y_;
 	rect_list = new rectangle(255, trans, Vec2f(0,0), 50,0,0);
+	//rect_list was supposed to be empty, but didn't realize this until later, so just made invisible 
 	frameNum = 0;
 	rand1 = 0;
 	rand2 = 0;
@@ -79,7 +80,7 @@ void HW02_ruebusj2Ver2App::setup()
 	cGreen = 0;
 	cBlue = 0;
 }
-
+//Controls key events
 void HW02_ruebusj2Ver2App::keyDown( KeyEvent event){
 	if(event.getChar() == 'q')
 		insert = true;
@@ -88,7 +89,7 @@ void HW02_ruebusj2Ver2App::keyDown( KeyEvent event){
 		reverse = true;
 }
 
-
+//this was going to be implemented, but didn't get around to it
 void HW02_ruebusj2Ver2App::mouseDown( MouseEvent event )
 {
 	event.getPos();
@@ -103,13 +104,21 @@ void HW02_ruebusj2Ver2App::update()
 		reverseList(rect_list);
 		reverse = false;
 	}
+	//reversed list if button pressed
 	
 	rectangle* cur = rect_list;
+	//Does border checks to make sure rectangles stay in app bounds.
+	//Also sets direction of each shape "randomly"
 	if(cur != NULL){
 		do{
 			if(frameNum%50==0)
 	{
-		if(cur->position_.x < 50)
+		if(cur->position_.x<50 && cur->position_.y<50)
+		{
+			rand1=cur->xDir_ = 2;
+			rand2 =cur->yDir_= 2;
+		}
+		else if(cur->position_.x < 50)
 		{
 			rand1=cur->xDir_ = 2;
 			rand2=cur->yDir_= rand()%3-1;
@@ -119,10 +128,10 @@ void HW02_ruebusj2Ver2App::update()
 			rand1 =cur->xDir_= rand()%3-1;
 			rand2 =cur->yDir_= 2;
 		}
-		else if(cur->position_.x<50 && cur->position_.y<50)
+		else if(cur->position_.x > appWidth-50 && cur->position_.y>appHeight-50)
 		{
-			rand1=cur->xDir_ = 2;
-			rand2 =cur->yDir_= 2;
+			rand1 = cur->xDir_=-2;
+			rand2 = cur->yDir_=-2;
 		}
 		else if(cur->position_.x > appWidth-50)
 		{
@@ -134,17 +143,13 @@ void HW02_ruebusj2Ver2App::update()
 			rand1 = cur->xDir_=rand()%3-1;
 			rand2 = cur->yDir_=-2;
 		}
-		else if(cur->position_.x > appWidth-50 && cur->position_.y>appHeight-50)
-		{
-			rand1 = cur->xDir_=-2;
-			rand2 = cur->yDir_=-2;
-		}
 		else
 		{
 			rand1 =cur->xDir_= rand()%3-1;
 			rand2 =cur->yDir_= rand()%3-1;
 		}
 	}
+			//inserts rectangle if button pressed
 			if(insert)
 			{
 				newPoint = new rectangle(cur->depth_-counter, trans, Vec2f(0,0),50, rand1, rand2); 
@@ -162,12 +167,10 @@ void HW02_ruebusj2Ver2App::update()
 
 				insert = false;
 			}
-
-			
-
+			//moves position of shape
 			cur->position_ = cur->position_ + cur->xDir_*x_+cur->yDir_*y_;
 			
-
+			//move to next shape
 			
 			cur = cur->next_;
 		} while (cur != rect_list);
@@ -180,6 +183,7 @@ void HW02_ruebusj2Ver2App::draw()
 	// clear out the window with white
 	gl::clear( Color( 255, 255, 255 ) ); 
 
+	//draws each rectangle in list except for the first one.
 	rectangle* cur = rect_list;
 	if(cur != NULL){
 		do{
