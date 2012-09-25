@@ -1,3 +1,11 @@
+/*Joshua Ruebusch
+This program creates squares and animates them using a linked list data struture. Press "q" to make a square and add it to the list. "r" will reverse the list. For best effect
+hold "q" until squares form all around the screen. Squares will darken as another effect to show depth in the picture. 
+
+Known bug: When "r" is pressed and another square is added, program will add the square to the "back" of the list (should be the front since reversed). This will mess up the
+color effect. 
+*/
+
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 #include "Rectangle.h"
@@ -116,6 +124,21 @@ void HW02_ruebusj2Ver2App::update()
 			rand1=cur->xDir_ = 2;
 			rand2 =cur->yDir_= 2;
 		}
+		else if(cur->position_.x > appWidth-50)
+		{
+			rand1 = cur->xDir_=-2;
+			rand2=cur->yDir_= rand()%3-1;
+		}
+		else if(cur->position_.y>appHeight-50)
+		{
+			rand1 = cur->xDir_=rand()%3-1;
+			rand2 = cur->yDir_=-2;
+		}
+		else if(cur->position_.x > appWidth-50 && cur->position_.y>appHeight-50)
+		{
+			rand1 = cur->xDir_=-2;
+			rand2 = cur->yDir_=-2;
+		}
 		else
 		{
 			rand1 =cur->xDir_= rand()%3-1;
@@ -143,9 +166,7 @@ void HW02_ruebusj2Ver2App::update()
 			
 
 			cur->position_ = cur->position_ + cur->xDir_*x_+cur->yDir_*y_;
-			/*
-			if(frameNum==2)
-				pressed = true;*/
+			
 
 			
 			cur = cur->next_;
@@ -156,7 +177,7 @@ void HW02_ruebusj2Ver2App::update()
 
 void HW02_ruebusj2Ver2App::draw()
 {
-	// clear out the window with black
+	// clear out the window with white
 	gl::clear( Color( 255, 255, 255 ) ); 
 
 	rectangle* cur = rect_list;
